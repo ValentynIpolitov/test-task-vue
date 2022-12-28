@@ -1,19 +1,58 @@
-<script setup>
-  import { RouterLink, RouterView } from 'vue-router'
+<script>
+import { RouterLink, RouterView } from 'vue-router'
+
+export default {
+  data() {
+    return {
+      drawer: false
+    }
+  },
+}
 </script>
 
 <template>
-  <header>
+  <v-app>
 
-    <div class="container max-w-7xl">
-      <nav>
-        <RouterLink to="/employees" class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Employees</RouterLink>
-        <RouterLink to="/employee/new" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">New Employee</RouterLink>
-      </nav>
-    </div>
-  </header>
+    <v-navigation-drawer v-model="drawer" app clipped hide-overlay>
+      <v-list>
+        <v-list-item prepend-avatar="https://randomuser.me/api/portraits/men/6.jpg" title="Valentyn Ipolitov"
+          subtitle="sv.vartey@gmail.com"></v-list-item>
+      </v-list>
 
-  <main class="container max-w-7xl min-h-screen">
-    <RouterView />
-  </main>
+      <v-divider></v-divider>
+
+      <v-list density="compact" nav>
+        <RouterLink to="/employees">
+          <v-list-item prepend-icon="mdi-account-multiple" title="Employees" value="employees">
+          </v-list-item>
+        </RouterLink>
+        <RouterLink to="/employee/new">
+          <v-list-item prepend-icon="mdi-account-plus" title="Add employee" value="add_employee">
+          </v-list-item>
+        </RouterLink>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar app absolute color="indigo darken-2" dark shrink-on-scroll prominent scroll-target="#scrolling-techniques">
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+
+      <v-app-bar-title>{{ this.$route.name }}</v-app-bar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-main>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
+    </v-main>
+
+    <v-footer app>
+      <!-- -->
+    </v-footer>
+  </v-app>
 </template>
