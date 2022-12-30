@@ -25,7 +25,7 @@ export default function useEmployees() {
             await axios.post('employees', data);
             await router.push({'name': 'employees'});
         } catch (error) {
-            if (error.response.status === 422) {
+            if (error.response && error.response.status === 422) {
                 errors.value = error.response.data.errors;
             }
         }
