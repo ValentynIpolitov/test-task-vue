@@ -20,6 +20,22 @@ export default function useEmployees() {
         employee.value = response.data.data;
     }
 
+    const getEmployeeDocument = async (id) => {
+        const url = 'employee-document/' + id;
+        axios({
+            method: 'get',
+            url,
+            responseType: 'blob',
+        })
+            .then((response) => {
+                let blob = new Blob([response.data], { type: 'application/pdf' }),
+                    url = window.URL.createObjectURL(blob)
+
+                window.open(url)
+            })
+            .catch(() => console.log('error occured'))
+    };
+
     const storeEmployee = async (data) => {
         try {
             await axios.post('employees', data, {
@@ -40,6 +56,7 @@ export default function useEmployees() {
         employees,
         getEmployee,
         getEmployees,
+        getEmployeeDocument,
         storeEmployee,
         errors
     }

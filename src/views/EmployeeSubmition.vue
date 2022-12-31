@@ -161,7 +161,7 @@ export default {
             </div>
         </div>
 
-        <v-file-input v-model="form.files" name="files" placeholder="Upload your documents" label="File input" multiple
+        <v-file-input accept=".pdf" v-model="form.files" name="files" placeholder="Upload your documents" label="File input" multiple
             prepend-icon="mdi-paperclip">
             <template v-slot:selection="{ fileNames }">
                 <template v-for="fileName in fileNames" :key="fileName">
