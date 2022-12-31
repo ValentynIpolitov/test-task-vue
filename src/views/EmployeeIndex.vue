@@ -27,6 +27,7 @@ const headers: Header[] = [
     { text: "Name", value: "name", sortable: true  },
     { text: "Employee ID", value: "employee_id", sortable: true  },
     { text: "Department", value: "department", sortable: true  },
+    { text: "Employee status", value: "employee_status", sortable: true  },
     { text: "Email", value: "email", sortable: true  },
 ];
 

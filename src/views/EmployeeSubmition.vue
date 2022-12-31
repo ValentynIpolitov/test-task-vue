@@ -1,12 +1,14 @@
 <script >
 import useEmployees from '../composables/employees';
+import useEmployeeStatuses from '../composables/employeeStatuses';
 
 
 export default {
     setup() {
         const { storeEmployee, errors } = useEmployees();
+        const { employeeStatuses, getEmployeeStatuses } = useEmployeeStatuses();
 
-        return { storeEmployee, errors }
+        return { storeEmployee, errors, employeeStatuses, getEmployeeStatuses };
     },
 
     data: () => ({
@@ -18,9 +20,6 @@ export default {
             employee_status_id: '',
             email: '',
         },
-        items: [
-            1, 2
-        ],
         nameRules: [
             v => !!v || 'Name is required',
             v => (v && v.length > 2) || 'Name must be at least 2 characters',
@@ -38,6 +37,11 @@ export default {
         ],
         alert: false,
     }),
+
+    mounted() {
+        this.getEmployeeStatuses();
+    },
+
     methods: {
         subitForm: function (form) {
             this.errors = {};
@@ -82,7 +86,7 @@ export default {
         <v-text-field v-model="form.department" :counter="10" :rules="departmentRules" label="Department"
             required></v-text-field>
 
-        <v-select v-model="form.employee_status_id" :items="items" :rules="[v => !!v || 'Item is required']"
+        <v-select v-model="form.employee_status_id" :items="employeeStatuses" item-title="name" item-value="id"  :rules="[v => !!v || 'Item is required']"
             label="Employment status" required></v-select>
 
         <v-text-field v-model="form.email" :rules="emailRules" label="E-mail" required></v-text-field>
