@@ -9,7 +9,18 @@
         </v-text-field>
     </div>
 
-    <EasyDataTable :headers="headers" :items="employees" :search-field="searchField" :search-value="searchValue" />
+    <EasyDataTable :headers="headers" :items="employees" :search-field="searchField" :search-value="searchValue">
+        <template #item-accomodation_requests="{ accomodation_requests }">
+            <div class="flex flex-wrap items-center content-center gap-1 mb-2 mt-2">
+                <div v-for="(request, index) in accomodation_requests" :key="index">
+                    <div
+                        class="text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-blue-200 text-blue-700 rounded-full">
+                        {{ request.accomodation_name }}
+                    </div>
+                </div>
+            </div>
+        </template>
+    </EasyDataTable>
 </template>
   
 <script lang="ts" setup>
