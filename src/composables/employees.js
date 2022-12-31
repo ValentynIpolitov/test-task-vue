@@ -1,4 +1,4 @@
-import { ref } from 'vue'; 
+import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
@@ -22,8 +22,12 @@ export default function useEmployees() {
 
     const storeEmployee = async (data) => {
         try {
-            await axios.post('employees', data);
-            await router.push({'name': 'employees'});
+            await axios.post('employees', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            await router.push({ 'name': 'employees' });
         } catch (error) {
             if (error.response && error.response.status === 422) {
                 errors.value = error.response.data.errors;

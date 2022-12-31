@@ -2,7 +2,6 @@
 import useEmployees from '../composables/employees';
 import useEmployeeStatuses from '../composables/employeeStatuses';
 
-
 export default {
     setup() {
         const { storeEmployee, errors } = useEmployees();
@@ -10,7 +9,6 @@ export default {
 
         return { storeEmployee, errors, employeeStatuses, getEmployeeStatuses };
     },
-
     data: () => ({
         form: {
             valid: true,
@@ -20,6 +18,7 @@ export default {
             employee_status_id: '',
             email: '',
             accomodation_requests: [],
+            files: []
         },
         accomodation_request: '',
         nameRules: [
@@ -39,20 +38,42 @@ export default {
         ],
         alert: false,
     }),
-
     mounted() {
         this.getEmployeeStatuses();
     },
-
     methods: {
         subitForm: function (form) {
             this.errors = {};
-            this.storeEmployee(form).then(items => {
+
+            // creating form data
+            let formData = new FormData();
+
+            formData.append('name', this.form.name);
+            formData.append('employee_id', this.form.employee_id);
+            formData.append('department', this.form.department);
+            formData.append('employee_status_id', this.form.employee_status_id);
+            formData.append('email', this.form.email);
+            formData.append('accomodation_requests', []);
+
+            // iteate over any file sent over appending the files to the form data.
+            for (var i = 0; i < this.form.files.length; i++) {
+                let file = this.form.files[i];
+                formData.append('files[' + i + ']', file);
+            }
+
+            // iteate over any file sent over appending the files to the form data.
+            for (var i = 0; i < this.form.accomodation_requests.length; i++) {
+                let accomodation_request = this.form.accomodation_requests[i];
+                formData.append('accomodation_requests[' + i + '][value]', accomodation_request.value);
+            }
+
+            // sending axios request
+            this.storeEmployee(this.form).then(items => {
                 if (Object.keys(this.errors).length === 0 && this.errors.constructor === Object) {
                     this.alert = true;
                     this.$refs.form.reset();
                     this.$refs.form.resetValidation();
-                    this.accomodation_requests = [];
+                    this.form.accomodation_requests = [];
                     setTimeout(() => this.alert = false, 1700);
                 } else {
                     this.alert = false;
@@ -81,7 +102,7 @@ export default {
         </div>
     </div>
 
-    <!-- validation errors -->
+    <!-- server validation errors -->
     <div v-if="errors">
         <div v-for="error in errors" :key="error[0]"
             class="mb-2 bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
@@ -139,6 +160,17 @@ export default {
                 </div>
             </div>
         </div>
+
+        <v-file-input v-model="form.files" name="files" placeholder="Upload your documents" label="File input" multiple
+            prepend-icon="mdi-paperclip">
+            <template v-slot:selection="{ fileNames }">
+                <template v-for="fileName in fileNames" :key="fileName">
+                    <v-chip size="small" label color="primary" class="mr-2">
+                        {{ fileName }}
+                    </v-chip>
+                </template>
+            </template>
+        </v-file-input>
 
         <v-btn color="info" type="submit">
             Submit
